@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Monetag</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Earn Coins</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -80,14 +80,43 @@
       font-weight: bold;
       cursor: pointer;
     }
+    #adOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.95);
+      color: white;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    #countdown {
+      font-size: 48px;
+      margin: 10px 0;
+      background: rgba(0,0,0,0.5);
+      padding: 10px 20px;
+      border-radius: 10px;
+    }
+    #adFrame {
+      width: 100%;
+      height: 80vh;
+      border: none;
+      border-radius: 0 0 10px 10px;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>Dear User, Welcome To Auto MoneTag Ads</h2>
+  <h2>Welcome to Earn Coins 🎮</h2>
 
-  <button class="button" onclick="openAd()">🎥 Watch Ads</button>
+  <button class="button" onclick="startAd()">🎥 Watch Ads</button>
   <button class="button" onclick="window.open('https://www.instagram.com/its_swamiboy_2025?igsh=OTh5cnB3MXhhOWIz', '_blank')">🎥 Direct Ads</button>
 
   <div class="ad-box" id="adDisplay">Click "Watch Ads" to view an ad</div>
@@ -107,69 +136,57 @@
 
 <div class="footer">
   <div>🏠 Home</div>
-  <div onclick="openEarnPage()">💰 Earn</div>
+  <div onclick="alert('Earn Page Coming Soon')">💰 Earn</div>
   <div>💳 Withdraw</div>
   <div>👤 Profile</div>
+</div>
+
+<!-- Ad Overlay -->
+<div id="adOverlay">
+  <iframe id="adFrame" src="" allowfullscreen></iframe>
+  <div id="countdown">30</div>
 </div>
 
 <script>
   let adsWatched = 0;
 
-  function openAd() {
+  function startAd() {
     if (adsWatched >= 50) {
       alert("🎉 All 50 ads watched!");
       return;
     }
 
-    const adWindow = window.open("", "AdWindow", "width=400,height=400");
+    const overlay = document.getElementById("adOverlay");
+    const countdown = document.getElementById("countdown");
+    const adFrame = document.getElementById("adFrame");
+    let timeLeft = 30;
 
-    adWindow.document.write(`
-      <html>
-      <head>
-        <title>Ad Playing...</title>
-        <style>
-          body { font-family: Arial; text-align: center; padding-top: 100px; background: #000; color: #fff; }
-          h1 { font-size: 24px; }
-        </style>
-      </head>
-      <body>
-        <h1>🎬 Your Ad is playing...</h1>
-        <p>⏳ Please wait 30 seconds...</p>
-        <p id="countdown">30</p>
-        <script>
-          let count = 30;
-          const countdown = document.getElementById("countdown");
-          const interval = setInterval(() => {
-            count--;
-            countdown.innerText = count;
-            if (count <= 0) {
-              clearInterval(interval);
-              window.opener.postMessage("adWatched", "*");
-              window.close();
-            }
-          }, 1000);
-        </script>
-      </body>
-      </html>
-    `);
-  }
+    // Set ad URL here
+    adFrame.src = "https://www.profitableratecpm.com/frfegw4f?key=9510cf16dc2bef24c6efff2caa8270cd";
 
-  window.addEventListener("message", function (event) {
-    if (event.data === "adWatched") {
-      adsWatched++;
-      document.getElementById("adDisplay").innerText = `✅ Ad ${adsWatched} watched successfully!`;
-      document.getElementById("adCountText").innerText = `Ads Watched: ${adsWatched}/50`;
-      const progress = (adsWatched / 50) * 100;
-      document.getElementById("progressBar").style.width = `${progress}%`;
+    overlay.style.display = "flex";
+    countdown.textContent = timeLeft;
 
-      if (adsWatched >= 50) {
-        document.getElementById("unlockBtn").disabled = false;
+    const timer = setInterval(() => {
+      timeLeft--;
+      countdown.textContent = timeLeft;
+
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        overlay.style.display = "none";
+        adFrame.src = ""; // stop the ad iframe
+
+        adsWatched++;
+
+        document.getElementById("adDisplay").innerText = `✅ Ad ${adsWatched} watched successfully!`;
+        document.getElementById("adCountText").innerText = `Ads Watched: ${adsWatched}/50`;
+        document.getElementById("progressBar").style.width = (adsWatched / 50 * 100) + "%";
+
+        if (adsWatched >= 50) {
+          document.getElementById("unlockBtn").disabled = false;
+        }
       }
-    }
-  });
-
-  function openEarnPage() {
-    window.open("earn.html", "_blank"); // open new tab
+    }, 1000);
   }
 </script>
 
