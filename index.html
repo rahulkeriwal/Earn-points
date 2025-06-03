@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monetag</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #113f7d;
+      margin: 0;
+      padding: 0;
+      color: white;
+    }
+    .container {
+      background: #1d4fa7;
+      margin: 20px;
+      border-radius: 10px;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+    }
+    .button {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      background: linear-gradient(to right, #8300e9, #009fff);
+      border: none;
+      border-radius: 30px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .ad-box {
+      background: white;
+      color: black;
+      height: 150px;
+      margin: 15px 0;
+      border-radius: 10px;
+      text-align: center;
+      line-height: 150px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .progress-container {
+      background: #2e5fae;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 20px;
+    }
+    .progress-track {
+      background: #aaa;
+      border-radius: 10px;
+      height: 20px;
+      margin-top: 10px;
+      width: 100%;
+    }
+    .progress-bar {
+      background: green;
+      height: 20px;
+      width: 0%;
+      border-radius: 10px;
+      transition: width 0.3s;
+    }
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #062f63;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+    .footer div {
+      color: yellow;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Dear User, Welcome To Auto MoneTag Ads</h2>
+
+  <button class="button" onclick="openAd()">🎥 Watch Ads</button>
+  <button class="button" onclick="window.open('https://www.instagram.com/its_swamiboy_2025?igsh=OTh5cnB3MXhhOWIz', '_blank')">🎥 Direct Ads</button>
+
+  <div class="ad-box" id="adDisplay">Click "Watch Ads" to view an ad</div>
+
+  <div class="progress-container">
+    <p>Unlock Box: Watch 50 Ads</p>
+    <div class="progress-track">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <p id="adCountText">Ads Watched: 0/50</p>
+    <button class="button" id="unlockBtn" disabled>🎁 Unlock Box</button>
+    <p>
+      Unlock Step-by-Step Rewards! 🎁 Start with $0.1, progress to $1, and finally claim $5! 💸😲 Keep watching ads to unlock bigger rewards!
+    </p>
+  </div>
+</div>
+
+<div class="footer">
+  <div>🏠 Home</div>
+  <div onclick="openEarnPage()">💰 Earn</div>
+  <div>💳 Withdraw</div>
+  <div>👤 Profile</div>
+</div>
+
+<script>
+  let adsWatched = 0;
+
+  function openAd() {
+    if (adsWatched >= 50) {
+      alert("🎉 All 50 ads watched!");
+      return;
+    }
+
+    const adWindow = window.open("", "AdWindow", "width=400,height=400");
+
+    adWindow.document.write(`
+      <html>
+      <head>
+        <title>Ad Playing...</title>
+        <style>
+          body { font-family: Arial; text-align: center; padding-top: 100px; background: #000; color: #fff; }
+          h1 { font-size: 24px; }
+        </style>
+      </head>
+      <body>
+        <h1>🎬 Your Ad is playing...</h1>
+        <p>⏳ Please wait 30 seconds...</p>
+        <p id="countdown">30</p>
+        <script>
+          let count = 30;
+          const countdown = document.getElementById("countdown");
+          const interval = setInterval(() => {
+            count--;
+            countdown.innerText = count;
+            if (count <= 0) {
+              clearInterval(interval);
+              window.opener.postMessage("adWatched", "*");
+              window.close();
+            }
+          }, 1000);
+        </script>
+      </body>
+      </html>
+    `);
+  }
+
+  window.addEventListener("message", function (event) {
+    if (event.data === "adWatched") {
+      adsWatched++;
+      document.getElementById("adDisplay").innerText = `✅ Ad ${adsWatched} watched successfully!`;
+      document.getElementById("adCountText").innerText = `Ads Watched: ${adsWatched}/50`;
+      const progress = (adsWatched / 50) * 100;
+      document.getElementById("progressBar").style.width = `${progress}%`;
+
+      if (adsWatched >= 50) {
+        document.getElementById("unlockBtn").disabled = false;
+      }
+    }
+  });
+
+  function openEarnPage() {
+    window.open("earn.html", "_blank"); // open new tab
+  }
+</script>
+
+</body>
+</html>
